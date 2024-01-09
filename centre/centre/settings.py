@@ -98,7 +98,7 @@ WSGI_APPLICATION = 'centre.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'test1',
+        'NAME': 'dd',
         'USER': 'postgres',
         'PASSWORD': 'saif',
         'HOST': 'localhost',
