@@ -46,14 +46,25 @@ class ContratFormSerializer(serializers.ModelSerializer):
 
 class UserFormWithContratFormSerializer(serializers.ModelSerializer):
     contrats = ContratFormSerializer(many=True, required=False)
-
+    total_prixcontracts = serializers.SerializerMethodField()
+    total_nbr_contracts = serializers.SerializerMethodField()
     class Meta:
         model = UserForm
         fields = '__all__'
-
+    def get_total_prixcontracts(self, obj):
+        return obj.total_prixcontracts()
+    def get_total_nbr_contracts(self, obj):
+        return obj.total_nbr_contracts()
     def create(self, validated_data):
         contrats_data = validated_data.pop('contrats', [])
         user_form = UserForm.objects.create(**validated_data)
         for contrat_data in contrats_data:
             ContratForm.objects.create(user_form=user_form, **contrat_data)
         return user_form
+    
+class UserFormWithContratFormUpdateSerializer(serializers.ModelSerializer):
+    contrats = ContratFormSerializer(many=True, required=False, read_only=True)
+
+    class Meta:
+        model = UserForm
+        fields = '__all__'    

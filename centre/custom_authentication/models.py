@@ -60,6 +60,7 @@ class UserForm(models.Model):
 
     fullname = models.CharField(max_length=50, default='')
     fPrenom = models.CharField(max_length=50, default='')
+    factive = models.CharField(max_length=50, default='')
     fNai = models.CharField(default=0.0)
     fRegime = models.CharField(default=0.0)
     fSitu = models.CharField(max_length=50, default='')
@@ -79,9 +80,12 @@ class UserForm(models.Model):
     fCP = models.CharField(max_length=50, default='')
     fCom = models.CharField(max_length=50, default='')
     date_submitted = models.DateTimeField(auto_now_add=True) # Pour suivre quand le formulaire a été soumis
-    fstatut = models.CharField(max_length=50, default='en attente')
+    fstatut = models.CharField(max_length=50, default='')
     fprixTotale = models.FloatField(default=0.0)
-
+    def total_prixcontracts(self):
+        return sum(contrat.prixTotale for contrat in self.contrats.all())+20
+    def total_nbr_contracts(self):
+        return sum(contrat.Nombre_de_contrat for contrat in self.contrats.all())
     def __str__(self):
         return f"Form for {self.user.email}"    
 
@@ -110,7 +114,12 @@ class ContratForm(models.Model):
     Date_effet = models.CharField(max_length=50, default='')
     Date_de_résiliation = models.CharField(max_length=50, default='')
     Commentaire = models.CharField( default='')
+    prixTotale = models.FloatField(default=0.0)
 
+    def save(self, *args, **kwargs):
+        # Multiply the Nombre_de_contrat by 40 before saving
+        self.prixTotale = 40*self.Nombre_de_contrat
+        super(ContratForm, self).save(*args, **kwargs)
     def __str__(self):
         return f"ContratForm - ID: {self.id}"
 
