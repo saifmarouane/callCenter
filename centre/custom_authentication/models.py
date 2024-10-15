@@ -53,6 +53,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         super().save(*args, **kwargs)
 ########################################################################################"
     
+from django.utils import timezone
 
     
 class UserForm(models.Model):
@@ -60,26 +61,26 @@ class UserForm(models.Model):
 
     fullname = models.CharField(max_length=50, default='')
     fPrenom = models.CharField(max_length=50, default='')
-    factive = models.CharField(max_length=50, default='')
-    fNai = models.CharField(default=0.0)
-    fRegime = models.CharField(default=0.0)
+    factive = models.CharField(max_length=50, default='', null=True, blank=True)
+    fNai = models.CharField(default='',help_text="Format : JJ/MM/AAAA",null=True,blank=True)
+    fRegime = models.CharField(default='', null=True, blank=True)
     fSitu = models.CharField(max_length=50, default='')
     fSexe = models.CharField(max_length=50, default='')
-    fEmail = models.CharField(max_length=50, default='')
-    fPays_de_naissance = models.CharField(max_length=50, default='')
+    fEmail = models.CharField(max_length=50, default='', null=True, blank=True)
+    fPays_de_naissance = models.CharField(max_length=50, default='', null=True, blank=True)
 
-    fville = models.CharField(max_length=50, default='')
-    fAdresse = models.CharField(max_length=100, default='')
-    fAdresse2 = models.CharField(max_length=100, default='')
+    fville = models.CharField(max_length=50, default='', null=True, blank=True)
+    fAdresse = models.CharField(max_length=100, default='', null=True, blank=True)
+    fAdresse2 = models.CharField(max_length=100, default='', null=True, blank=True)
 
-    fCpo = models.CharField(max_length=50, default='')
-    ftel = models.CharField(max_length=50, default='')
-    ftel1 = models.CharField(max_length=50, default='')
+    fCpo = models.CharField(max_length=50, default='', null=True, blank=True)
+    ftel = models.CharField(max_length=50, default='', null=True, blank=True)
+    ftel1 = models.CharField(max_length=50, default='', null=True, blank=True)
     fprof = models.CharField(max_length=50, default='')
-    fvilN = models.CharField(max_length=50, default='')
-    fCP = models.CharField(max_length=50, default='')
-    fCom = models.CharField(max_length=50, default='')
-    date_submitted = models.DateTimeField(auto_now_add=True) # Pour suivre quand le formulaire a été soumis
+    fvilN = models.CharField(max_length=50, default='', null=True, blank=True)
+    fCP = models.CharField(max_length=50, default='', null=True, blank=True)
+    fCom = models.CharField(max_length=50, default='', null=True, blank=True)
+    #date_submitted = models.DateTimeField(auto_now_add=True) # Pour suivre quand le formulaire a été soumis
     fstatut = models.CharField(max_length=50, default='')
     fprixTotale = models.FloatField(default=0.0)
     def total_prixcontracts(self):
@@ -88,7 +89,20 @@ class UserForm(models.Model):
         return sum(contrat.Nombre_de_contrat for contrat in self.contrats.all())
     def __str__(self):
         return f"Form for {self.user.email}"    
+    date_submitted = models.CharField(max_length=10, blank=True)  # Champ non requis
 
+    def save(self, *args, **kwargs):
+        # Obtenez la date actuelle
+        current_date = timezone.now().date()
+
+        # Formatez la date en 'DD/MM/YYYY'
+        formatted_date = current_date.strftime('%d/%m/%Y')
+
+        # Stockez la date dans le champ
+        self.date_submitted = formatted_date
+
+        super(UserForm, self).save(*args, **kwargs)
+  
   
 
 
@@ -100,20 +114,20 @@ class ContratForm(models.Model):
     #user_form = models.ForeignKey(UserForm, related_name='contrats', on_delete=models.CASCADE)
     user_form = models.ForeignKey(UserForm, related_name='contrats', on_delete=models.CASCADE, default=1)
 
-    Société_a_résilier= models.CharField(max_length=50, default='')
-    Nom_assurance= models.CharField(max_length=50, default='')
-    Code_postale= models.CharField(max_length=50, default='')
-    Adresse= models.CharField(max_length=50, default='')
-    Ville= models.CharField(max_length=50, default='')
-    Type_de_Résiliation = models.CharField(max_length=50, default='')
-    Type_de_contrat = models.CharField(max_length=50, default='')
-    N_contrat = models.CharField(max_length=50, default='')
-    N_SS = models.CharField(max_length=50, default='')
-    Nombre_de_contrat = models.IntegerField(default=0)
-    N_RAR = models.CharField(max_length=50, default='')
-    Date_effet = models.CharField(max_length=50, default='')
-    Date_de_résiliation = models.CharField(max_length=50, default='')
-    Commentaire = models.CharField( default='')
+    Société_a_résilier= models.CharField(max_length=50, default='', null=True, blank=True)
+    Nom_assurance= models.CharField(max_length=50, default='', null=True, blank=True)
+    Code_postale= models.CharField(max_length=50, default='', null=True, blank=True)
+    Adresse= models.CharField(max_length=50, default='', null=True, blank=True)
+    Ville= models.CharField(max_length=50, default='', null=True, blank=True)
+    Type_de_Résiliation = models.CharField(max_length=50, default='', null=True, blank=True)
+    Type_de_contrat = models.CharField(max_length=50, default='', null=True, blank=True)
+    N_contrat = models.CharField(max_length=50, default='', null=True, blank=True)
+    N_SS = models.CharField(max_length=50, default='', null=True, blank=True)
+    Nombre_de_contrat = models.IntegerField(default=0, null=True, blank=True)
+    N_RAR = models.CharField(max_length=50, default='', null=True, blank=True)
+    Date_effet = models.CharField(max_length=20, default='',help_text="Format : JJ/MM/AAAA",null=True,blank=True)
+    Date_de_résiliation = models.CharField(max_length=20, default='',help_text="Format : JJ/MM/AAAA",null=True,blank=True)
+    Commentaire = models.CharField( default='', null=True, blank=True)
     prixTotale = models.FloatField(default=0.0)
 
     def save(self, *args, **kwargs):

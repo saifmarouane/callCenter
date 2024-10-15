@@ -77,7 +77,6 @@ class UserFormViewSetlist(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     lookup_field = 'username'
     serializer_class = UserFormWithContratFormSerializer
-
     def perform_create(self, serializer):
         serializer.save()
     def list_by_username(self, request, username=None):
