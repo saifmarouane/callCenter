@@ -85,15 +85,10 @@ export const Layout = (props) => {
                 sx={{ color: '#15B79E' }}
                 target="_blank"
               >
-                CallCenter
+                OweCenter
               </Box>
             </Typography>
-            <img
-              alt=""
-              src="/assets/logopic.png" 
-              style={{ width: '75%', height: 'auto', marginTop: '20px', marginLeft : '10%' }}
-
-            />
+            
           </Box>
         </Grid>
       </Grid>

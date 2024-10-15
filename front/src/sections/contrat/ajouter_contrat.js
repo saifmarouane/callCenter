@@ -8,7 +8,9 @@ import axios from 'axios';
 import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIcon';
 import ArrowUpOnSquareIcon from '@heroicons/react/24/solid/ArrowUpOnSquareIcon';
 import React from 'react';
-import {   Button, FormControl, InputLabel, Select, MenuItem,makeStyles } from '@material-ui/core';
+import { Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+
 import {  Container, SvgIcon } from '@mui/material';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
@@ -18,9 +20,7 @@ const useStyles = makeStyles((theme) => ({
     border: 'none',
     },
   card: {
-    padding: theme.spacing(1),
     marginTop:'20px',
-    margin: theme.spacing(1),
     boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
     borderRadius: '12px',
     backgroundColor: '#f9f9f9',
@@ -28,13 +28,10 @@ const useStyles = makeStyles((theme) => ({
 
   },
   title: {
-    marginBottom: theme.spacing(2),
-    paddingBottom: theme.spacing(1),
     marginBottom:'5px',
     color: '#333',
   },
   button: {
-    marginTop: theme.spacing(3),
     backgroundColor: '#007bff',
     color: '#fff',
     '&:hover': {
